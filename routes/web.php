@@ -1,8 +1,6 @@
 <?php
 
-use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\PostController;
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,22 +14,18 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/categories', [CategoryController::class, 'index']);
-Route::get('/users', [UserController::class, 'index']);
-// List all posts
-Route::get('/posts', [PostController::class, 'index'])->name('posts.index');
+Route::get('/', function () {
+    return view('welcome');
+});
 
-// Show the form for creating a new post
-Route::get('/posts/create', [PostController::class, 'create'])->name('posts.create');
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
 
-// Store a new post
-Route::post('/posts', [PostController::class, 'store'])->name('posts.store');
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
 
-// Show the form for editing an existing post
-Route::get('/posts/{post}/edit', [PostController::class, 'edit'])->name('posts.edit');
-
-// Update an existing post
-Route::put('/posts/{post}', [PostController::class, 'update'])->name('posts.update');
-
-// Delete an existing post
-Route::delete('/posts/{post}', [PostController::class, 'destroy'])->name('posts.destroy');
+require __DIR__.'/auth.php';
