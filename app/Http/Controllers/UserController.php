@@ -13,4 +13,10 @@ class UserController extends Controller
         $users = DB::table('users')->get();
         return view('users.index', compact('users'));
     }
+
+    public function indexAPI()
+    {
+        $users = User::all();
+        return response()->json($users);
+    }
 }

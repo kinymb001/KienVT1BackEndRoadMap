@@ -13,4 +13,10 @@ class CategoryController extends Controller
         $categories = DB::table('categories')->get();
         return view('categories.index', compact('categories'));
     }
+
+    public function indexAPI()
+    {
+        $categories = Category::all();
+        return response()->json($categories);
+    }
 }
