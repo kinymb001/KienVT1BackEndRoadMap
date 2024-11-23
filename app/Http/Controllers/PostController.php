@@ -66,4 +66,50 @@ class PostController extends Controller
         $post->delete();
         return redirect()->route('posts.index')->with('success', 'Post deleted successfully.');
     }
+
+    //----------------------------------------------------------------------------------------------------
+    public function indexAPI()
+    {
+        $posts = Post::all();
+        return response()->json($posts);
+    }
+
+    // Lấy thông tin chi tiết bài viết
+    public function showAPI(Post $post)
+    {
+        return response()->json($post);
+    }
+
+    // Tạo mới bài viết
+    public function storeAPI(Request $request)
+    {
+        $validatedData = $request->validate([
+            'title' => 'required|string|max:255',
+            'content' => 'required|string',
+        ]);
+
+        $post = Post::create($validatedData);
+
+        return response()->json(['message' => 'Post created successfully', 'post' => $post], 201);
+    }
+
+    // Cập nhật bài viết
+    public function updateAPI(Request $request, Post $post)
+    {
+        $validatedData = $request->validate([
+            'title' => 'sometimes|string|max:255',
+            'content' => 'sometimes|string',
+        ]);
+
+        $post->update($validatedData);
+
+        return response()->json(['message' => 'Post updated successfully', 'post' => $post]);
+    }
+
+    // Xóa bài viết
+    public function destroyAPI(Post $post)
+    {
+        $post->delete();
+        return response()->json(['message' => 'Post deleted successfully']);
+    }
 }
