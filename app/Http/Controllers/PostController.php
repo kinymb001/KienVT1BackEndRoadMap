@@ -96,6 +96,7 @@ class PostController extends Controller
     // Cập nhật bài viết
     public function updateAPI(Request $request, Post $post)
     {
+        $this->authorize('update', $post);
         $validatedData = $request->validate([
             'title' => 'sometimes|string|max:255',
             'content' => 'sometimes|string',
